@@ -41,4 +41,13 @@ public class ExceptionBenchmark {
 			}
 		}
 	}
+
+	@Benchmark
+	public void throwAndCatchWithoutException(Blackhole blackhole) {
+		for (int i = 0; i < LIMIT; i++) {
+			try {
+				blackhole.consume(new Object());
+			} catch (Exception exception) { }
+		}
+	}
 }
