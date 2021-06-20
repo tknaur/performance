@@ -1,5 +1,6 @@
 package net.knaur.java.performance.benchmark;
 
+import net.knaur.java.performance.benchmark.exception.CustomException;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
 
@@ -24,6 +25,17 @@ public class ExceptionBenchmark {
 		for (int i = 0; i < LIMIT; i++) {
 			try {
 				throw new Exception();
+			} catch (Exception e) {
+				blackhole.consume(e);
+			}
+		}
+	}
+
+	@Benchmark
+	public void throwAndCatchCustomExceptionWithoutFillingStacktrace(Blackhole blackhole) {
+		for (int i = 0; i < LIMIT; i++) {
+			try {
+				throw new CustomException();
 			} catch (Exception e) {
 				blackhole.consume(e);
 			}
