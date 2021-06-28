@@ -55,6 +55,30 @@ public class ExceptionBenchmark {
 	}
 
 	@Benchmark
+	@Fork(value = 1, jvmArgs = "-XX:-StackTraceInThrowable")
+	public void throwMyExceptionWithoutAddingStackTrace(Blackhole blackhole) {
+		for (int i = 0; i < LIMIT; i++) {
+			try {
+				throw new CustomException();
+			} catch (Exception e) {
+				blackhole.consume(e);
+			}
+		}
+	}
+
+	@Benchmark
+	@Fork(value = 1, jvmArgs = "-XX:MaxJavaStackTraceDepth=1")
+	public void throwExceptionWithStackTraceDepthLimit(Blackhole blackhole) {
+		for (int i = 0; i < LIMIT; i++) {
+			try {
+				throw new Exception();
+			} catch (Exception e) {
+				blackhole.consume(e);
+			}
+		}
+	}
+
+	@Benchmark
 	public void throwAndCatchWithoutException(Blackhole blackhole) {
 		for (int i = 0; i < LIMIT; i++) {
 			try {
